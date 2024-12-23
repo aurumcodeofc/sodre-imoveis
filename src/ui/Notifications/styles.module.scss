@@ -1,0 +1,26 @@
+.notificationIcon {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.bellContainer {
+  position: relative;
+}
+
+.notificationCount {
+  position: absolute;
+  top: 18px;
+  right: 0px;
+
+  background-color: #a2272b;
+  color: #fff;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+}

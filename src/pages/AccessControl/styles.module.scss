@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  .containerTitle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Ubuntu", sans-serif;
+    background-color: #fff;
+    padding-bottom: 15px;
+    width: 100%;
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      span {
+        cursor: pointer;
+      }
+      h1 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-top: 20px;
+        padding-left: 24px;
+      }
+    }
+
+    .btContainer {
+      display: flex;
+      flex-direction: row;
+      width: 332px;
+      justify-content: space-between;
+      margin-right: 44px;
+    }
+  }
+
+  .list {
+    width: 100%;
+  }
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 10.5%;
+  left: 71.5%;
+  width: 156px;
+  height: 150px;
+  font-size: 15px;
+  font-family: "Ubuntu", sans-serif;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+  box-shadow: 2px 2px 4px 0px #000000;
+}
+
+.dropdownMenu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdownMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdownMenu li {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.dropdownMenu li:hover {
+  background-color: #f5f5f5;
+}

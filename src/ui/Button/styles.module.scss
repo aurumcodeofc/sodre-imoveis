@@ -1,0 +1,30 @@
+.btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: "Ubuntu", sans-serif;
+  box-shadow: 2px 2px 4px 0px #000000;
+}
+
+.btnPrimary {
+  background-color: #0b0076;
+  //   border: 1px solid #a2a2a2;
+  color: #ffffff;
+  font-weight: 400;
+}
+
+.btnPrimary:hover {
+  background-color: #0c0076c4;
+}
+
+.btnSecondary {
+  background-color: #ffffff;
+  color: #444444;
+}
+
+.btnSecondary:hover {
+  background-color: #00000028;
+}
