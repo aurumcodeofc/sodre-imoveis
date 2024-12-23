@@ -1,0 +1,52 @@
+.sidebar {
+  width: 60px;
+  height: 100%;
+  background-color: #222222;
+  transition: width 0.3s ease;
+  overflow: visible;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+  font-family: "Inter", sans-serif;
+  font-weight: bold;
+
+  &.expanded {
+    width: 275px;
+
+    color: white;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    color: #ecf0f1;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    flex-wrap: nowrap;
+    text-wrap: inherit;
+
+    &:hover {
+      background-color: #34495e;
+      flex-wrap: nowrap;
+      text-wrap: inherit;
+    }
+
+    .icon {
+      font-size: 20px;
+    }
+
+    .label {
+      margin-left: 10px;
+      font-size: 16px;
+      text-decoration: none;
+    }
+  }
+}

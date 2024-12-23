@@ -363,7 +363,7 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
       </div>
     </div>
     <div className={styles.btContainer}>
-    <Button customStyles={{width:"121px",height:"35px",borderRadius:"10px",display:"flex",alignItems:"center",
+    <Button type="button" onClick={onClose} customStyles={{width:"121px",height:"35px",borderRadius:"10px",display:"flex",alignItems:"center",
     justifyContent:"space-evenly",flexDirection:"row-reverse"}} variant="secondary">Cancelar</Button>
 
       <Button type = "submit" customStyles={{width:"121px",height:"35px",borderRadius:"10px",display:"flex",alignItems:"center",
