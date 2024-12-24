@@ -25,12 +25,12 @@ interface EmployeeProps {
 interface FormField {
   fields: EmployeeProps[];
   role: "administrador" | "gerente" | "estagiario" | "corretor";
-  onSubmit: (data: Record<string, string>) => void;
+  onSubmit:  (data: { name: string; email: string; status: string; role: string; registrationDate: string; lastAccess: string; }) => void;
   onClose: () => void;
 }
 
 const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
-  const [formData, setFormData] = useState<Record<string, string>>({
+  const [formData, setFormData] = useState<EmployeeProps & { role: string; registrationDate: string; lastAccess: string }>({
     fullName: "",
     cpf: "",
     email: "",
@@ -44,7 +44,10 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
     street: "",
     homeNumber: "",
     role: "", 
+    registrationDate: new Date().toLocaleDateString(),
+    lastAccess: new Date().toLocaleDateString(),
   });
+  
   const [states, setStates] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string>("");
@@ -58,12 +61,12 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
       cep: formattedCEP,
     }));
   
-    // Verifica se o CEP tem o formato válido de 8 caracteres numéricos
+   
     if (formattedCEP.length === 8 && /^\d{8}$/.test(formattedCEP)) {
       try {
         const addressData = await searchCep(formattedCEP);
   
-        // Preenche os campos automaticamente
+  
         setFormData((prevData) => ({
           ...prevData,
           street: addressData.logradouro || "",
@@ -71,17 +74,17 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
           homeNumber: addressData.unidade || "",
         }));
   
-        // Define o estado de acordo com o dado retornado
+
         const fetchedState = addressData.uf || "";
-        setSelectedState(fetchedState); // Define o estado automaticamente
+        setSelectedState(fetchedState); 
   
-        // Verifica se a cidade é retornada corretamente
+      
         if (addressData.localidade) {
-          setSelectedCity(addressData.localidade); // Atualiza a cidade com a localidade
+          setSelectedCity(addressData.localidade); 
         }
   
         if (fetchedState) {
-          handleStateChange(fetchedState); // Aciona a função de preenchimento de cidade ao identificar o estado
+          handleStateChange(fetchedState); 
         }
   
       } catch {
@@ -95,10 +98,10 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
       const statesList = await searchStates();
       console.log("lista", statesList);
     
-      // Ordena a lista de estados em ordem alfabética
+     
       const sortedStates = statesList.sort();
     
-      setStates(sortedStates); // Atualiza o estado com os estados ordenados
+      setStates(sortedStates); 
     };
     
 
@@ -111,10 +114,10 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
       const response = await fetch(`https://brasilapi.com.br/api/ibge/municipios/v1/${state}`);
       const data = await response.json();
   
-      // Aqui, extrai os nomes das cidades.
+
       if (Array.isArray(data)) {
-        const cityNames = data.map((cidade: { nome: string }) => cidade.nome); // Extrai apenas o nome da cidade
-        setCities(cityNames);  // Armazena os nomes das cidades no estado
+        const cityNames = data.map((cidade: { nome: string }) => cidade.nome); 
+        setCities(cityNames);  
       } else {
         console.error('Estrutura de dados inesperada:', data);
       }
@@ -130,10 +133,7 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
 
@@ -141,19 +141,26 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
     e.preventDefault(); 
     
  
-    if (!formData.nome || !formData.email || !formData.cpf) {
+    if (!formData.fullName || !formData.email || !formData.cpf) {
       alert("Por favor, preencha todos os campos: Nome, E-mail e CPF.");
       return; 
     }
   
-    // Validando o CPF
+   
     if (!validateCPF(formData.cpf)) {
-      alert("CPF inválido!"); // Exibe alerta se o CPF for inválido
-      return; // Interrompe o submit caso o CPF seja inválido
+      alert("CPF inválido!"); 
+      return; 
     }
   
-    // Se tudo estiver correto, os dados são enviados para a função onSubmit
-    onSubmit(formData);
+    
+    onSubmit({
+      name: formData.fullName, 
+      email: formData.email, 
+      status: "confirmado", 
+      role: formData.role, 
+      registrationDate: formData.registrationDate, 
+      lastAccess: formData.lastAccess
+    });
   };
   
 
@@ -235,7 +242,7 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
         onChange={(value) => {
           setFormData({
             ...formData,
-            telefone: value, // Atualiza apenas o telefone com o valor formatado
+            telefone: value,
           });
         }}
         placeholder="Digite seu telefone"
