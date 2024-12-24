@@ -3,8 +3,10 @@
   height: 100%;
   background-color: #222222;
   transition: width 0.3s ease;
-  overflow: visible;
+  overflow: hidden;
   position: fixed;
+  align-items: center;
+  justify-content: center;
   left: 0;
   top: 0;
   z-index: 99999;
@@ -13,40 +15,63 @@
 
   &.expanded {
     width: 275px;
-
     color: white;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 2px;
   }
 
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
   }
 
   .item {
     display: flex;
     align-items: center;
-    padding: 15px;
+    padding: 13px;
+    margin-left: 2px;
     color: #ecf0f1;
     cursor: pointer;
     transition: background 0.2s ease;
-    flex-wrap: nowrap;
-    text-wrap: inherit;
 
     &:hover {
-      background-color: #34495e;
-      flex-wrap: nowrap;
-      text-wrap: inherit;
+      background-color: #000000;
+      text-decoration: underline;
+      text-underline-offset: 4px;
     }
 
-    .icon {
-      font-size: 20px;
+    span {
+      display: flex;
+      align-items: center;
+
+      svg {
+        max-width: 30px;
+        max-height: 30px;
+      }
     }
 
     .label {
       margin-left: 10px;
       font-size: 16px;
       text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
+  }
+
+  .exit {
+    margin-top: 60px;
   }
 }

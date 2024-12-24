@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './styles.module.scss';
 import { Link } from 'react-router-dom';
-import { HomeIcon, PanelIcon, ClientIcon, FaturaIcon, VistoriaIcon, ContractIcon, MaintenanceIcon, AccessIcon } from '../../icons';
+import { HomeIcon, PanelIcon, ClientIcon, FaturaIcon, VistoriaIcon, ContractIcon, MaintenanceIcon, AccessIcon, LogoFull, LogoMin, ExitIcon } from '../../icons';
 
 type SidebarItem = {
   label: string;
@@ -29,7 +29,11 @@ const Sidebar: React.FC = () => {
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
+             <div className={styles.logo}>
+          {isExpanded? <LogoFull/> : <LogoMin/>}
+        </div>
       <ul>
+ 
         {items.map((item, index) => (
           <li key={index} className={styles.item}>
             <span  className={styles.icon}>{item.icon}</span> 
@@ -37,7 +41,16 @@ const Sidebar: React.FC = () => {
           </li>
           
         ))}
+        <div className={styles.exit}>
+        <li className={styles.item}>
+          <span className={styles.icon} style={{display:"flex"}}><ExitIcon/>
+          {isExpanded && <Link to = {"#"} style={{textDecoration:'none', color:"white", textAlign:"center"}}><span className={styles.label} style={{color:"#FF474D", textAlign:"center"}}>SAIR</span></Link>}
+
+          </span>
+        </li>
+      </div>
       </ul>
+
     </div>
   );
 };
