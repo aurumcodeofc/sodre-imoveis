@@ -8,7 +8,7 @@ const MainLayout: React.FC = () =>{
         <>
                <Header />
                <Sidebar/>
-            <main style={{ marginTop: "109px", marginLeft:"70px" }}>
+            <main style={{ marginTop: "75px", marginLeft:"95px" }}>
            
                 <Outlet />
             </main>

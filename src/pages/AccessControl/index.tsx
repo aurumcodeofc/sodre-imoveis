@@ -6,6 +6,7 @@ import styles from "./styles.module.scss"
 import List from "../../components/List/List";
 import { fetchFakeUsers } from "../../services/accessControl/fetchFakeUsers";
 import {User} from "../../services/accessControl/fetchFakeUsers"
+import TitlePage from "../../components/TitlePage/TitlePage";
 
 export default function AccessControl(){
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
@@ -72,10 +73,7 @@ export default function AccessControl(){
     <>
     <div className={styles.container}>
     <div className={styles.containerTitle}>
-        <div className={styles.title}>
-        <span><ArrowBack/></span>
-        <h1>Controle de Acesso</h1>
-        </div>
+        <TitlePage text="Controle de Acesso"/>
         <div className={styles.btContainer}>
         <Button onClick={toggleMenu} customStyles={{width:"151px",height:"50px",borderRadius:"30px",display:"flex",alignItems:"center",
     justifyContent:"space-evenly",flexDirection:"row-reverse"}} variant="secondary"><span><DownArrow/></span>AÇÕES</Button>

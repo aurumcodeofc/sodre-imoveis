@@ -1,0 +1,17 @@
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: "Ubuntu", sans-serif;
+  background-color: #fff;
+
+  span {
+    cursor: pointer;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-top: 20px;
+    padding-left: 24px;
+  }
+}
