@@ -7,7 +7,7 @@ export default function ImportEmployee(){
 
 return(
     <div className={styles.container}>
-    <TitlePage text="Importar Funcionários"/>
+     <TitlePage text="Importar funcionários"/>
     <div className={styles.file}>
         <div className={styles.listContainer}>
         <h2>Atenção!</h2>

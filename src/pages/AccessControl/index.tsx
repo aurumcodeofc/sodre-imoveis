@@ -1,9 +1,10 @@
 import { useState,useEffect } from "react";
-import { ArrowBack,AddBt, DownArrow } from "../../icons"
+import {AddBt, DownArrow } from "../../icons"
 import Button from "../../ui/Button/Button"
 import FormAccess from "../../components/FormAccess/FormAccess";
 import styles from "./styles.module.scss"
 import List from "../../components/List/List";
+import {Link} from "react-router-dom"
 import { fetchFakeUsers } from "../../services/accessControl/fetchFakeUsers";
 import {User} from "../../services/accessControl/fetchFakeUsers"
 import TitlePage from "../../components/TitlePage/TitlePage";
@@ -12,7 +13,7 @@ export default function AccessControl(){
     const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [userData, setUserData] = useState<User[]>([]);
-
+   
 
     useEffect(() => {
       const fetchData = async () => {
@@ -37,6 +38,8 @@ export default function AccessControl(){
     const handleCloseModal = () => {
       setIsOpenModal(false);
     };
+
+ 
     
     const handleFormSubmit = (data: Record<string, string>) => {
       const newUser: User = {
@@ -44,7 +47,7 @@ export default function AccessControl(){
         name: data.nome,
         email: data.email,
         status: "confirmado", // Status fixo como 'confirmado' ou outro valor permitido
-        role: "Usuário", // Outro valor para 'role' conforme necessário
+        role: "administrador", // Outro valor para 'role' conforme necessário
         registrationDate: new Date().toLocaleDateString(),
         lastAccess: new Date().toLocaleDateString(),
       };
@@ -96,7 +99,7 @@ export default function AccessControl(){
         >
           <ul>
             <li>Importar</li>
-            <li>Exportar</li>
+            <Link to="/importar-funcionario"><li>Exportar</li></Link>
             <li>Aplicar Permissões</li>
           </ul>
         </div>

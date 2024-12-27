@@ -1,22 +1,20 @@
 import styles from "./styles.module.scss"
 
 import { ArrowBack } from "../../icons"
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 interface TitlePageProps{
     text:string;
-    link?:string
+   
 }
-const TitlePage: React.FC<TitlePageProps> = ({text,link}) => {
+const TitlePage: React.FC<TitlePageProps> = ({text}) => {
+  const navigate = useNavigate();
+  const back = () =>{
+    navigate(-1);
+  }
     return(
         <div className={styles.title}>
-            <span>
-        {link ? (
-          <Link to={link}>
+            <span onClick = {back}>
             <ArrowBack />
-          </Link>
-        ) : (
-          <ArrowBack />
-        )}
       </span>
         <h1>{text}</h1>
         </div>
