@@ -6,6 +6,7 @@ import FormAccess from "../../components/FormAccess/FormAccess";
 import styles from "./styles.module.scss";
 import List from "../../components/List/List";
 import {Link} from "react-router-dom"
+import ExportEmployee from "../../components/ExportEmployee/ExportEmployee";
 
 type User = {
   id: number;
@@ -20,6 +21,7 @@ type User = {
 export default function AccessControl() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isOpenExport, setIsOpenExport] = useState<boolean>(false);
   const [userData, setUserData] = useState<User[]>([]); 
 
   const toggleMenu = () => {
@@ -30,9 +32,19 @@ export default function AccessControl() {
     setIsOpenModal(!isOpenModal);
   };
 
+  const toggleExport = () => {
+    setIsOpenExport(!isOpenExport);
+    setIsMenuOpen(false);
+  }
+
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
+
+  const handleCloseExport = () =>{
+  
+    setIsOpenExport(false);
+  }
 
 
   const handleFormSubmit = (newUser: Omit<User, "id">) => {
@@ -113,13 +125,19 @@ export default function AccessControl() {
         >
           <ul>
           <Link to="/importar-funcionario"><li>Importar</li></Link>
-            <li>Exportar</li>
+            <li onClick={toggleExport}>Exportar</li>
             <li>Aplicar Permissões</li>
           </ul>
         </div>
         {isOpenModal && (
           <div>
             <FormAccess onSubmit={handleFormSubmit} onClose={handleCloseModal} />
+          </div>
+        )}
+
+      {isOpenExport && (
+          <div>
+            <ExportEmployee onClose={handleCloseExport}/>
           </div>
         )}
       </div>

@@ -1,0 +1,91 @@
+.container {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+  font-family: "Ubuntu", sans-serif;
+  cursor: pointer;
+
+  .formContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 590px;
+    height: 347px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    cursor: default;
+    .header {
+      display: flex;
+      flex-direction: row;
+      height: 43px;
+      border-radius: 1px;
+      border: 1px solid #0b0076;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 20px;
+      color: #ffffff;
+      padding-right: 20px;
+      margin-bottom: 30px;
+      background-color: #0b0076;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      font-size: 10px;
+
+      span {
+        cursor: pointer;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: space-around;
+      .inputContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        .input {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+
+          label {
+            font-weight: 700;
+          }
+
+          select {
+            width: 247px;
+            height: 40px;
+            border: 1px solid #737373;
+            border-radius: 5px;
+            box-shadow: 2px 2px 4px 0px #000000;
+            outline: none;
+          }
+        }
+      }
+
+      .btContainer {
+        display: flex;
+
+        margin-left: 230px;
+        align-items: center;
+        gap: 22px;
+        margin-top: 22px;
+      }
+    }
+  }
+}

@@ -163,7 +163,6 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
     });
   };
   
-
   return (
     <div className={styles.formContainer} onClick={handleOverlayClick}>
     <div className={styles.formContent}>
