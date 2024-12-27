@@ -11,7 +11,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onFileSelect }) => {
     if (file) {
       const allowedExtensions = ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.ms-excel"];
       if (allowedExtensions.includes(file.type)) {
-        onFileSelect(file); // Pass selected file to parent
+        onFileSelect(file); 
       } else {
         alert("Apenas arquivos .xlsx ou .xls são permitidos.");
       }

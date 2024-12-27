@@ -13,7 +13,7 @@ const Sidebar: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const items: SidebarItem[] = [
-    { label: 'Início', icon: <HomeIcon />, link: "/"},
+    { label: 'Início', icon: <HomeIcon />, link: "/inicio"},
     { label: 'Painel', icon: <PanelIcon />, link: "#" },
     { label: 'Clientes', icon: <ClientIcon />, link: "#" },
     { label: 'Faturas', icon: <FaturaIcon />, link: "#" },
