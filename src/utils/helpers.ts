@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import * as XLSX from "xlsx";
   export const formatCPF = (value: string) => {
     const onlyNumbers = value.replace(/\D/g, '').slice(0, 11); 
     return onlyNumbers
@@ -71,4 +73,27 @@
     }
   
     return ""; 
+  };
+
+  export const exportToExcel = (data: any[], fileName: string) => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Dados");
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+
+  export const formatCurrentDate = (): string => {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0"); 
+    const year = now.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  export const formatDate = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear(); 
+    return `${day}/${month}/${year}`;
   };

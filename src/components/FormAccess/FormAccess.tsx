@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
+
 import {CloseIconModal} from "../../icons";
 import {searchCep} from "../../utils/searchCep"
 import {searchStates} from "../../utils/searchStates"
@@ -25,7 +26,20 @@ interface EmployeeProps {
 interface FormField {
   fields: EmployeeProps[];
   role: "administrador" | "gerente" | "estagiario" | "corretor";
-  onSubmit:  (data: { name: string; email: string; status: string; role: string; registrationDate: string; lastAccess: string; }) => void;
+  onSubmit:  (data: {   fullName: string;
+    cpf: string; 
+    email: string;
+    creci: string; 
+    telefone: string; 
+    birthData: string; 
+    cep: string; 
+    city: string;
+    state: string;
+    status:string;
+    role:string;
+    neighborhood: string;
+    street: string;
+    homeNumber: string;  registrationDate: string; lastAccess: string; }) => void;
   onClose: () => void;
 }
 
@@ -110,6 +124,10 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
 
   const handleStateChange = async (state: string) => {
     setSelectedState(state);
+    setFormData(prevData => ({
+      ...prevData,
+      state: state,
+    }));
     try {
       const response = await fetch(`https://brasilapi.com.br/api/ibge/municipios/v1/${state}`);
       const data = await response.json();
@@ -124,6 +142,15 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
     } catch (error) {
       console.error("Erro ao carregar cidades:", error);
     }
+  };
+
+  const handleCityChange = (city: string) => {
+    setSelectedCity(city);
+    // Atualiza o formData com a cidade selecionada
+    setFormData(prevData => ({
+      ...prevData,
+      city: city,
+    }));
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -154,12 +181,23 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
   
     
     onSubmit({
-      name: formData.fullName, 
-      email: formData.email, 
-      status: "confirmado", 
+      fullName: formData.fullName,
+      cpf: formData.cpf, 
+      email: formData.email,
+      creci: formData.creci,
+      telefone: formData.telefone,
+      birthData: formData.birthData,
+      cep:formData.cep,
+      city:formData.city,
+      state:formData.state,
+      neighborhood:formData.neighborhood,
+      street:formData.street,
+      homeNumber: formData.homeNumber, 
+      status: "pendente", 
       role: formData.role, 
       registrationDate: formData.registrationDate, 
-      lastAccess: formData.lastAccess
+      lastAccess: formData.lastAccess,
+      
     });
   };
   
@@ -302,7 +340,7 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
         <select
   name="city"
   value={selectedCity}
-  onChange={(e) => setSelectedCity(e.target.value)}
+  onChange={(e) => handleCityChange(e.target.value)}
 >
   <option disabled>Escolha uma cidade</option>
   {cities.map((city) => (
@@ -360,7 +398,7 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
           onChange={handleChange}
           
         >
-          <option disabled >Escolha um status</option>
+           <option disabled value="">Escolha um status</option>
           <option value="administrador">Administrador</option>
           <option value="gerente">Gerente</option>
           <option value="estagiario">Estagiário</option>

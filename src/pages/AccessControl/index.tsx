@@ -5,6 +5,7 @@ import TitlePage from "../../components/TitlePage/TitlePage"
 import FormAccess from "../../components/FormAccess/FormAccess";
 import styles from "./styles.module.scss";
 import List from "../../components/List/List";
+import { ToastContainer } from "react-toastify";
 import {Link} from "react-router-dom"
 import ExportEmployee from "../../components/ExportEmployee/ExportEmployee";
 
@@ -137,7 +138,8 @@ export default function AccessControl() {
 
       {isOpenExport && (
           <div>
-            <ExportEmployee onClose={handleCloseExport}/>
+            <ToastContainer style={{zIndex:"99999"}}/>
+            <ExportEmployee onClose={handleCloseExport} data={userData}/>
           </div>
         )}
       </div>

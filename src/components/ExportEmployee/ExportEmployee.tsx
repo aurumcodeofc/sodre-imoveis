@@ -1,21 +1,117 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.scss";
 import { CloseIconModal } from "../../icons";
 import Button from "../../ui/Button/Button";
+import { exportToExcel, formatCurrentDate, formatDate } from "../../utils/helpers";
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css"; 
 
-interface ExportEmployeeProps {
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  onClose: () => void;
+interface EmployeeData {
+  id: number;
+  fullName: string;
+  cpf: string;
+  email: string;
+  creci: string;
+  telefone: string;
+  birthData: string;
+  cep: string;
+  city: string;
+  state: string;
+  status: string;
+  role: string;
+  neighborhood: string;
+  street: string;
+  homeNumber: string;
+  registrationDate: string;
+  lastAccess: string;
 }
 
-const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onSubmit,onClose  }) => {
-      const handleOverlayClick = (e: React.MouseEvent) => {
-        if (e.target === e.currentTarget) {
-          onClose();
-        }
-      };
+interface ExportEmployeeProps {
+  onClose: () => void;
+  data: EmployeeData[];
+}
+
+const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onClose, data }) => {
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("all");
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const filterByPeriod = (registrationDate: string): boolean => {
+    const date = new Date(registrationDate);
+    const now = new Date();
+
+    if (selectedPeriod === "lastMonth") {
+      const lastMonth = new Date(now.setMonth(now.getMonth() - 1));
+      return date >= lastMonth;
+    }
+
+    if (selectedPeriod === "lastYear") {
+      const lastYear = new Date(now.setFullYear(now.getFullYear() - 1));
+      return date >= lastYear;
+    }
+
+    return true;
+  };
+
+  const getFilteredData = (): EmployeeData[] => {
+    return data.filter((item) => {
+      const matchesStatus =
+        selectedStatus === "all" || item.status === selectedStatus;
+
+      const matchesPeriod = filterByPeriod(item.registrationDate);
+
+      return matchesStatus && matchesPeriod;
+    });
+  };
+
+  const handleExport = () => {
+    const filteredData = getFilteredData();
+
+    // Verifica se existem dados após os filtros
+    if (filteredData.length === 0) {
+      toast.error("Não há dados disponíveis com os filtros selecionados.");
+      return;
+    }
+
+    const limitedData = filteredData.slice(0, 1000);
+
+    const mappedData = limitedData.map((item) => ({
+      "ID": item.id,
+      "Nome": item.fullName,
+      "CPF": item.cpf,
+      "Email": item.email,
+      "CRECI": item.creci,
+      "Telefone": item.telefone,
+      "Data de Nascimento": formatDate(item.birthData),
+      "CEP": item.cep,
+      "Cidade": item.city,
+      "Estado": item.state,
+      "Status": item.status,
+      "Cargo": item.role,
+      "Bairro": item.neighborhood,
+      "Rua": item.street,
+      "Número": item.homeNumber,
+      "Data de Registro": item.registrationDate,
+      "Último Acesso": item.lastAccess,
+    }));
+
+    const formattedDate = formatCurrentDate();
+    const fileName = `funcionarios_sodre_${formattedDate}`;
+
+    exportToExcel(mappedData, fileName);
+
+    // Mostra toast de sucesso após a exportação
+    toast.success("Exportação concluída com sucesso!");
+  };
+
   return (
     <div className={styles.container} onClick={handleOverlayClick}>
+        <ToastContainer />
       <div className={styles.formContainer}>
         <div className={styles.header}>
           <h1>Exportar Funcionários</h1>
@@ -23,42 +119,78 @@ const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onSubmit,onClose  }) =>
             <CloseIconModal />
           </span>
         </div>
-          <form onSubmit={onSubmit}>
-            <div className={styles.inputContainer}>
+        <form>
+          <div className={styles.inputContainer}>
             <div className={styles.input}>
-            <label id="status">Status</label>
-            <select name="status" id="status">
-              <option value="all">Todos</option>
-              <option value="pending">Pendente</option>
-              <option value="confirmed">Confirmado</option>
-              <option value="blocked">Bloqueado</option>
-            </select>
+              <label htmlFor="status">Status</label>
+              <select
+                name="status"
+                id="status"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="all">Todos</option>
+                <option value="pendente">Pendente</option>
+                <option value="confirmado">Confirmado</option>
+                <option value="bloqueado">Bloqueado</option>
+              </select>
             </div>
-
             <div className={styles.input}>
-            <label id="periodo">Período</label>
-            <select name="periodo" id="periodo">
-              <option value="all">Todos</option>
-              <option value="pending">Pendente</option>
-              <option value="confirmed">Confirmado</option>
-              <option value="blocked">Bloqueado</option>
-            </select>
+              <label htmlFor="periodo">Período</label>
+              <select
+                name="periodo"
+                id="periodo"
+                value={selectedPeriod}
+                onChange={(e) => setSelectedPeriod(e.target.value)}
+              >
+                <option value="all">Todos</option>
+                <option value="lastMonth">Último Mês</option>
+                <option value="lastYear">Último Ano</option>
+              </select>
             </div>
+          </div>
+          <div className={styles.btContainer}>
+            <Button
+              type="button"
+              onClick={onClose}
+              customStyles={{
+                width: "121px",
+                height: "35px",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                flexDirection: "row-reverse",
+                backgroundColor: "#404040",
+                color: "#FFFFFF",
+                fontWeight: "700",
+                fontSize: "15px",
+              }}
+              variant="secondary"
+            >
+              Cancelar
+            </Button>
 
-            </div>
-            <div>
-            <div className={styles.btContainer}>
-    <Button type="button" onClick={onClose} customStyles={{width:"121px",height:"35px",borderRadius:"10px",display:"flex",alignItems:"center",
-    justifyContent:"space-evenly",flexDirection:"row-reverse", backgroundColor:"#404040",color:"#FFFFFF", fontWeight:"700",fontSize:"15px"}} variant="secondary">Cancelar</Button>
-
-      <Button type = "submit" customStyles={{width:"161px",height:"40px",borderRadius:"10px",display:"flex",alignItems:"center",
-    justifyContent:"space-evenly",flexDirection:"row-reverse",fontWeight:"700", fontSize:"20px"}} variant="primary">Baixar</Button>
- 
-    </div>
-            </div>
-
-          </form>
-  
+            <Button
+              type="button"
+              onClick={handleExport}
+              customStyles={{
+                width: "161px",
+                height: "40px",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                flexDirection: "row-reverse",
+                fontWeight: "700",
+                fontSize: "20px",
+              }}
+              variant="primary"
+            >
+              Baixar
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );

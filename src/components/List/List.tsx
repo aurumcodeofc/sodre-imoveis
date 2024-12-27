@@ -131,7 +131,7 @@ const List: React.FC<ListProps> = ({ data, columns, onEdit, onDelete, onView }) 
                   {capitalizeFirstLetter(record.status)}
                 </td>
               )}
-              {columns.includes("name") && <td>{capitalizeFirstLetter(record.name)}</td>}
+              {columns.includes("name") && <td>{capitalizeFirstLetter(record.fullName)}</td>}
               {columns.includes("email") && <td>{record.email.toLowerCase()}</td>}
               {columns.includes("role") && <td>{capitalizeFirstLetter(record.role)}</td>}
               {columns.includes("registrationDate") && <td>{record.registrationDate}</td>}
