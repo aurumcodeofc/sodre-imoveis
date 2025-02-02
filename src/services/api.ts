@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-    baseURL:"localhost:8080"
+    baseURL:"https://sodre-imoveis-production.up.railway.app"
 });
 
 export default api;

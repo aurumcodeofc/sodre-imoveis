@@ -1,21 +1,21 @@
-import { Outlet } from "react-router-dom";
-import Header from "../components/Header/Header"
+import { Outlet, useLocation } from "react-router-dom";
+import Header from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
 
-// import LeftMenu from "../components/LeftMenu/LeftMenu";
+const MainLayout: React.FC = () => {
+    const location = useLocation();
+    const isLoginPage = location.pathname === "/"; 
 
-const MainLayout: React.FC = () =>{
-    return(
+    return (
         <>
+            {!isLoginPage && <Header />}
+            {!isLoginPage && <Sidebar />}
             
-               <Header />
-               <Sidebar/>
-            <main style={{ marginTop: "75px", marginLeft:"95px" }}>
-           
+            <main style={{ marginTop: isLoginPage ? "0px" : "75px", marginLeft: isLoginPage ? "0px" : "95px" }}>
                 <Outlet />
             </main>
         </>
-    )
-}
+    );
+};
 
 export default MainLayout;
