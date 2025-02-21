@@ -146,7 +146,6 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
 
   const handleCityChange = (city: string) => {
     setSelectedCity(city);
-    // Atualiza o formData com a cidade selecionada
     setFormData(prevData => ({
       ...prevData,
       city: city,

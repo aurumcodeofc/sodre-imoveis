@@ -1,29 +1,51 @@
 import { FC } from "react";
+import { useNavigate } from "react-router-dom"; // Importa o useNavigate
 import styles from "./styles.module.scss";
 
-// Definindo as props que o componente Avatar vai receber
 interface AvatarProps {
+  variant:"header" | "profile";
   name: string;
-  image?: string | null; // A imagem pode ser uma URL ou null
+  image?: string | null;
+  title: string | null; 
+  navigateTo?: string; 
 }
 
-const Avatar: FC<AvatarProps> = ({ name, image }) => {
-  
-  // Função para pegar as iniciais (primeira letra do primeiro e do último nome)
+const Avatar: FC<AvatarProps> = ({ name, image, title, navigateTo,variant }) => {
+  const navigate = useNavigate(); // Obtém a função de navegação
+
+  const getVariantClass = () => {
+    switch (variant) {
+      case "header":
+        return styles.header;
+      case "profile":
+        return styles.profile;
+      default:
+        return "";
+    }
+  };
   const getInitials = (name: string) => {
-    const nameArray = name.split(" "); // Divide o nome completo em partes
-    const firstInitial = nameArray[0].charAt(0).toUpperCase(); // Primeira letra do primeiro nome
-    const lastInitial = nameArray[nameArray.length - 1].charAt(0).toUpperCase(); // Primeira letra do último nome
-    return firstInitial + lastInitial; // Junta as iniciais em uma string
+    const nameArray = name.split(" ");
+    const firstInitial = nameArray[0].charAt(0).toUpperCase();
+    const lastInitial = nameArray[nameArray.length - 1].charAt(0).toUpperCase();
+    return firstInitial + lastInitial;
+  };
+
+  const handleAvatarClick = () => {
+    if (navigateTo) {
+      navigate(navigateTo); // Navega para a URL especificada em navigateTo
+    }
   };
 
   return (
-    <div className={styles.avatar}>
+    <div
+    className={`${styles.avatar} ${getVariantClass()}`} title={title}
+      onClick={handleAvatarClick}
+    >
       {image ? (
         <img src={image} alt="Avatar" width={50} height={50} />
       ) : (
-        <div className={styles.avatarPlaceholder}>
-          {getInitials(name)} {/* Exibe as iniciais */}
+        <div className={styles.avatarPlaceholder} >
+          {getInitials(name)}
         </div>
       )}
     </div>

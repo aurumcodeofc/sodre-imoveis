@@ -1,3 +1,28 @@
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+
+  
+  .eyeButton {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
 .input{
     width: 364px;
     height: 48px;
@@ -9,5 +34,7 @@
     background-color: #BCBCBC;
     color: #666666;
     font-family: 'Ubuntu',sans-serif;
+
+    
     
 }

@@ -1,11 +1,22 @@
 import styles from "./styles.module.scss"
 import Shortcuts from "../../components/Shortcuts/Shortcuts"
 import { RegisterIcon } from "../../icons"
+import { useAuth } from "../../context/AuthContext"
+
 
 export default function Home(){
+    const { user, isLoading } = useAuth();
+    console.log("laza",user)
+    if (isLoading) {
+      return <div>Carregando...</div>; // Ou um loader de sua escolha
+    }
+  
+
+
+
     return(
         <div className={styles.container}>
-            <h1>Bem-vindo a Sodré Imóveis Admin, João Sodré!</h1>
+            <h1>Bem-vindo a Sodré Imóveis Admin, {user?.name}</h1>
 
             <div className = {styles.shortcutsContainer}>
                 <h2>Atalhos</h2>

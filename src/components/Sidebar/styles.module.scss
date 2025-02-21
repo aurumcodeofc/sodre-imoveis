@@ -16,6 +16,10 @@
   &.expanded {
     width: 275px;
     color: white;
+
+    .item{
+      margin-left: 0;
+    }
   }
 
   .logo {

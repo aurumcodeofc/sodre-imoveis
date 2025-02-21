@@ -1,59 +1,139 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 
+interface LoginData {
+  token: string;
+  roles: { id: string; role: string }[];
+  first_access: boolean;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  mobile_phone: string;
+  person_type: string;
+  birth_date: string;
+  created_at: string;
+  updated_at: string;
+  address: {
+    street: string;
+    city: string;
+    state: string;
+    postalCode: string;
+    complement: string;
+    district: string;
+    addressNumber: string;
+  };
+}
+
 interface AuthContextType {
-  user: unknown; 
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<unknown>(null);
+  const [loginData, setLoginData] = useState<LoginData | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [usersList, setUsersList] = useState<User[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const fetchUserSession = async (token: string) => {
+    try {
+      const response = await axios.get<User>(
+        "https://sodre-imoveis-production.up.railway.app/users/profile",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.status === 200) {
+        setUser(response.data);
+        setUsersList((prevUsers) => [...prevUsers, response.data]);
+        setIsAuthenticated(true);
+      } else {
+        logout();
+      }
+    } catch (error) {
+      console.error("Erro ao validar sessão:", error);
+      logout();
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setIsAuthenticated(true);
+
+      const existingUser = usersList.find((u) => u.id === token); 
+      if (existingUser) {
+        setUser(existingUser);
+        setIsLoading(false);
+      } else {
+        fetchUserSession(token);
+      }
+    } else {
+      setIsAuthenticated(false);
+      setIsLoading(false);
     }
-  }, []);
+  }, [usersList]);
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post("https://sodre-imoveis-production.up.railway.app/sessions", { email, password });
-      const { accessToken, refreshToken, user } = response.data;
+      const response = await axios.post<LoginData>(
+        "https://sodre-imoveis-production.up.railway.app/sessions",
+        { email, password }
+      );
 
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      const { token, roles, first_access } = response.data;
 
-      setUser(user);
-      setIsAuthenticated(true);
+      if (response.status === 200) {
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        setLoginData({ token, roles, first_access });
+        setIsAuthenticated(true);
+        fetchUserSession(token);
+      } else {
+        throw new Error("Falha ao realizar login");
+      }
     } catch (error) {
       console.error("Erro no login:", error);
+      throw new Error("Falha ao realizar login");
     }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
     delete axios.defaults.headers.common["Authorization"];
-
+    setLoginData(null);
     setUser(null);
     setIsAuthenticated(false);
   };
 
+  if (isLoading) {
+    return <div></div>;
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

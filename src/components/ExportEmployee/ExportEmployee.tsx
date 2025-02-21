@@ -72,7 +72,6 @@ const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onClose, data }) => {
   const handleExport = () => {
     const filteredData = getFilteredData();
 
-    // Verifica se existem dados após os filtros
     if (filteredData.length === 0) {
       toast.error("Não há dados disponíveis com os filtros selecionados.");
       return;
@@ -104,8 +103,6 @@ const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onClose, data }) => {
     const fileName = `funcionarios_sodre_${formattedDate}`;
 
     exportToExcel(mappedData, fileName);
-
-    // Mostra toast de sucesso após a exportação
     toast.success("Exportação concluída com sucesso!");
   };
 

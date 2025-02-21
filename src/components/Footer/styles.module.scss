@@ -1,0 +1,19 @@
+.footer{
+    background-color: #000000;
+    height:40px;
+    bottom:0;
+    width: 98%;
+    left: 5.9%;
+    font-size: 14px;
+    font-weight: 400;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    
+
+    span{
+        color:#FFFF;
+        margin-left: 10px;
+        
+    }
+}

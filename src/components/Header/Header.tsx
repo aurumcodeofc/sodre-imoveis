@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import { HelpIcon } from "../../icons";
+
 import Avatar from "../../ui/Avatar/Avatar";
 import NotificationIcon from "../../ui/Notifications/NotificationIcon";
+import { useAuth } from "../../context/AuthContext";
 
 const Header: React.FC = () => {
+  const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [notifications, setNotifications] = useState([
     { id: 1, message: "Hoje é aniversário de Maria Silva", isRead: false,type:"payment"  },
@@ -40,8 +42,8 @@ const Header: React.FC = () => {
           notifications={notifications}
           onUpdateNotifications={handleUpdateNotifications} 
         />
-        <HelpIcon />
-        <Avatar name="Vanessa Martins Gomes" />
+   
+        <Avatar name= {user.name} title={user?.name} navigateTo="/meu-perfil" variant="header"/>
       </div>
     </div>
   );

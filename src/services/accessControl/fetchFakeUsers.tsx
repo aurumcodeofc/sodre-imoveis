@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 
-// Definindo a interface User
 export interface User {
   id: number;
   status: 'confirmado' | 'pendente' | 'bloqueado';

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styles from './styles.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Importando useNavigate
 import { HomeIcon, PanelIcon, ClientIcon, FaturaIcon, VistoriaIcon, ContractIcon, MaintenanceIcon, AccessIcon, LogoFull, LogoMin, ExitIcon } from '../../icons';
+import { useAuth } from '../../context/AuthContext';
 
 type SidebarItem = {
   label: string;
@@ -10,7 +11,9 @@ type SidebarItem = {
 };
 
 const Sidebar: React.FC = () => {
+  const { isAuthenticated, logout } = useAuth();
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate(); // Inicializando useNavigate para redirecionamento
 
   const items: SidebarItem[] = [
     { label: 'Início', icon: <HomeIcon />, link: "/inicio"},
@@ -23,34 +26,46 @@ const Sidebar: React.FC = () => {
     { label: 'Controle de Acesso', icon: <AccessIcon />, link: "/acesso" }
   ];
 
+  const handleLogout = () => {
+    logout(); // Chama o logout para limpar o estado
+    navigate('/login'); // Redireciona o usuário para a página de login
+  };
+
   return (
     <div
       className={`${styles.sidebar} ${isExpanded ? styles.expanded : ''}`}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-             <div className={styles.logo}>
-          {isExpanded? <LogoFull/> : <LogoMin/>}
-        </div>
+      <div className={styles.logo}>
+        {isExpanded ? <LogoFull /> : <LogoMin />}
+      </div>
       <ul>
- 
         {items.map((item, index) => (
           <li key={index} className={styles.item}>
-            <span  className={styles.icon}>{item.icon}</span> 
-            {isExpanded && <Link to = {item.link} style={{textDecoration:'none', color:"white"}}><span className={styles.label}>{item.label}</span></Link>}
+            <span className={styles.icon}>{item.icon}</span>
+            {isExpanded && (
+              <Link to={item.link} style={{ textDecoration: 'none', color: "white" }}>
+                <span className={styles.label}>{item.label}</span>
+              </Link>
+            )}
           </li>
-          
         ))}
-        <div className={styles.exit}>
-        <li className={styles.item}>
-          <span className={styles.icon} style={{display:"flex"}}><ExitIcon/>
-          {isExpanded && <Link to = {"#"} style={{textDecoration:'none', color:"white", textAlign:"center"}}><span className={styles.label} style={{color:"#FF474D", textAlign:"center"}}>SAIR</span></Link>}
-
-          </span>
-        </li>
-      </div>
+        
+        {/* Botão de Logout */}
+        {isAuthenticated && (
+          <li className={`${styles.item} ${styles.exit}`} onClick={handleLogout}>
+            <span className={styles.icon} style={{ display: "flex", cursor: "pointer" }}>
+              <ExitIcon />
+              {isExpanded && (
+                <span className={styles.label} style={{ color: "#FF474D", textAlign: "center" }}>
+                  SAIR
+                </span>
+              )}
+            </span>
+          </li>
+        )}
       </ul>
-
     </div>
   );
 };
