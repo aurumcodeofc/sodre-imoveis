@@ -8,7 +8,7 @@ interface InputProps {
   placeholder?: string;
   type?: "text" | "password" | "checkbox" | "email";
   value?: string | boolean;
-  checked?: boolean; // Adiciona a prop checked
+  checked?: boolean; 
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -32,7 +32,7 @@ const Input: React.FC<InputProps> = ({
         <label className={styles.checkboxLabel}>
           <input
             type="checkbox"
-            checked={checked} // Agora usa a prop checked
+            checked={checked}
             onChange={onChange}
             className={styles.checkbox}
           />
