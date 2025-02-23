@@ -12,14 +12,13 @@ import { searchCep } from "../../utils/searchCep";
 import api from "../../services/api"; 
 import Button from "../../ui/Button/Button";
 import ModalChangePassword from "../../components/ModalChangePassword/ModalChangePassword";
+import { ToastContainer } from "react-toastify";
 
 export default function Profile() {
-  const { user } = useAuth();
+  const { user } = useAuth(); 
   const [isOpenChangePass, setIsOpenChangePass] = useState<boolean>(false);
   const dateHour = `${formatDate(user.created_at)} ${formatHour(user.created_at)}`;
   const birthDate = formatDate(user.birth_date);
-
-
 
   const [name, setName] = useState(user?.name);
   const [phone, setPhone] = useState(user?.phone); 
@@ -41,9 +40,10 @@ export default function Profile() {
     setIsOpenChangePass(!isOpenChangePass);
   };
 
-  const handleCloseChangePassword = () =>{
+  const handleCloseChangePassword = () => {
     setIsOpenChangePass(false);
-  }
+  };
+  
   const handleCepChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const cepValue = e.target.value;
     setAddress((prev) => ({ ...prev, postalCode: cepValue }));
@@ -64,7 +64,6 @@ export default function Profile() {
     }
   };
 
-
   useEffect(() => {
     const hasChanges =
       name !== user?.name ||
@@ -82,17 +81,22 @@ export default function Profile() {
     setIsEdited(hasChanges);
   }, [name, phone, birthDateState, address, user, cpf, cnpj]);
 
-
   const handleSave = async () => {
+    const token = localStorage.getItem('token'); 
+
+    if (!token) {
+      alert("Token não encontrado, por favor faça login novamente.");
+      return;
+    }
+
     try {
-   
       const updatedData = {
         id: user?.id,
         full_name: name,
         birth_date: birthDateState,
-        cpf,
-        cnpj,
-        phone,
+        cpf: cpf,
+        cnpj: cnpj || "",
+        phone: phone,
         mobile_phone: phone, 
         address: {
           street: address.street,
@@ -103,13 +107,14 @@ export default function Profile() {
           postalCode: address.postalCode,
         },
       };
-
-      await api.put("/users/update", updatedData);
-
+      console.log("lazaaa",updatedData)
+      await api.put("/users/update", updatedData, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+        },
+      });
 
       setIsEdited(false);
-
-
       alert("Informações atualizadas com sucesso!");
     } catch (error) {
       console.error("Erro ao atualizar os dados:", error);
@@ -124,134 +129,133 @@ export default function Profile() {
 
   const userContent = (
     <>
-    <div className={styles.userContainer}>
-      <div className={styles.firstStep}>
-        <div className={styles.userInfo}>
-          <ProfileField label="Data de cadastro" value={dateHour} />
-          <ProfileField label="Email" value={user?.email} />
-        </div>
-        <div className={styles.userInfo}>
-          <ProfileField label="Pessoa" value={user?.person_type} />
-          <ProfileField label="Senha" value="********" disabled onClickPassword={toggleModal}/>
-        </div>
-      </div>
-
-      <h2>Informações Pessoais</h2>
-      <div className={styles.personInfo}>
-        <div className={styles.leftColumn}>
+      <div className={styles.userContainer}>
+        <div className={styles.firstStep}>
           <div className={styles.userInfo}>
-            <ProfileField
-              label="Nome Completo"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-            {user?.person_type === "FISICA" && (
-              <ProfileField
-                label="CPF"
-                value={formatCPF(cpf || "")}
-                onChange={(e) => setCpf(e.target.value)}
-              />
-            )}
-
-
-            {user?.person_type === "JURIDICA" && (
-              <ProfileField
-                label="CNPJ"
-                value={cnpj}
-                onChange={(e) => setCnpj(e.target.value)}
-              />
-            )}
-            <ProfileField
-              label="Data de nascimento"
-              value={birthDateState} 
-              onChange={handleBirthDateChange}
-              disabled={!isEdited}
-            />
-            <ProfileField
-              label="Telefone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+            <ProfileField label="Data de cadastro" value={dateHour} />
+            <ProfileField label="Email" value={user?.email} />
+          </div>
+          <div className={styles.userInfo}>
+            <ProfileField label="Pessoa" value={user?.person_type} />
+            <ProfileField label="Senha" value="********" disabled onClickPassword={toggleModal} />
           </div>
         </div>
-        <div className={styles.rightColumn}>
-          <div className={styles.subColumn}>
+
+        <h2>Informações Pessoais</h2>
+        <div className={styles.personInfo}>
+          <div className={styles.leftColumn}>
             <div className={styles.userInfo}>
               <ProfileField
-                label="CEP"
-                value={address.postalCode}
-                onChange={handleCepChange}
+                label="Nome Completo"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              {user?.person_type === "FISICA" && (
+                <ProfileField
+                  label="CPF"
+                  value={formatCPF(cpf || "")}
+                  onChange={(e) => setCpf(e.target.value)}
+                />
+              )}
+
+              {user?.person_type === "JURIDICA" && (
+                <ProfileField
+                  label="CNPJ"
+                  value={cnpj}
+                  onChange={(e) => setCnpj(e.target.value)}
+                />
+              )}
+              <ProfileField
+                label="Data de nascimento"
+                value={birthDateState} 
+                onChange={handleBirthDateChange}
                 disabled={!isEdited}
               />
               <ProfileField
-                label="Estado"
-                value={address.state}
-                disabled
-              />
-            </div>
-            <div className={styles.userInfo}>
-              <ProfileField
-                label="Cidade"
-                value={address.city}
-                disabled
+                label="Telefone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
           </div>
-
-          <div className={styles.subColumn}>
-            <div className={styles.userInfo}>
-              <ProfileField
-                label="Bairro"
-                value={address.district}
-                onChange={(e) => setAddress((prev) => ({ ...prev, district: e.target.value }))} 
-              />
-              <ProfileField
-                label="Rua"
-                value={address.street}
-                onChange={(e) => setAddress((prev) => ({ ...prev, street: e.target.value }))} 
-              />
+          <div className={styles.rightColumn}>
+            <div className={styles.subColumn}>
+              <div className={styles.userInfo}>
+                <ProfileField
+                  label="CEP"
+                  value={address.postalCode}
+                  onChange={handleCepChange}
+                  disabled={!isEdited}
+                />
+                <ProfileField
+                  label="Estado"
+                  value={address.state}
+                  disabled
+                />
+              </div>
+              <div className={styles.userInfo}>
+                <ProfileField
+                  label="Cidade"
+                  value={address.city}
+                  disabled
+                />
+              </div>
             </div>
-            <div className={styles.userInfo}>
-              <ProfileField
-                label="Número"
-                value={address.addressNumber}
-                onChange={(e) => setAddress((prev) => ({ ...prev, addressNumber: e.target.value }))} 
-              />
+
+            <div className={styles.subColumn}>
+              <div className={styles.userInfo}>
+                <ProfileField
+                  label="Bairro"
+                  value={address.district}
+                  onChange={(e) => setAddress((prev) => ({ ...prev, district: e.target.value }))} 
+                />
+                <ProfileField
+                  label="Rua"
+                  value={address.street}
+                  onChange={(e) => setAddress((prev) => ({ ...prev, street: e.target.value }))} 
+                />
+              </div>
+              <div className={styles.userInfo}>
+                <ProfileField
+                  label="Número"
+                  value={address.addressNumber}
+                  onChange={(e) => setAddress((prev) => ({ ...prev, addressNumber: e.target.value }))} 
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {isEdited && (
-        <div className={styles.saveButton}>
-          <Button
-            type="button"
-            onClick={handleSave}
-            customStyles={{
-              width: "130px",
-              height: "30px",
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-evenly",
-              flexDirection: "row",
-              fontWeight: "700",
-              fontSize: "15px",
-            }}
-            variant="primary"
-          >
-            Salvar
-          </Button>
-        </div>
-      )}
-    </div>
-    {isOpenChangePass && (
-          <div>
-            <ModalChangePassword onClose={handleCloseChangePassword}/>
+        {isEdited && (
+          <div className={styles.saveButton}>
+            <Button
+              type="button"
+              onClick={handleSave}
+              customStyles={{
+                width: "130px",
+                height: "30px",
+                borderRadius: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-evenly",
+                flexDirection: "row",
+                fontWeight: "700",
+                fontSize: "15px",
+              }}
+              variant="primary"
+            >
+              Salvar
+            </Button>
           </div>
         )}
-      
+      </div>
+      {isOpenChangePass && (
+        <div>
+          <ToastContainer style={{ zIndex: "9999999999" }} />
+          <ModalChangePassword onClose={handleCloseChangePassword} />
+        </div>
+      )}
     </>
   );
 

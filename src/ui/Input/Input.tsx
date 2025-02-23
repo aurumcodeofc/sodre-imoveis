@@ -45,6 +45,9 @@ const Input: React.FC<InputProps> = ({
             placeholder={placeholder}
             value={typeof value === "string" ? value : ""}
             onChange={onChange}
+            onCopy={(e) => e.preventDefault()}
+            onPaste={(e) => e.preventDefault()}
+            onCut={(e) => e.preventDefault()}
             className={styles.input}
           />
           {type === "password" && (

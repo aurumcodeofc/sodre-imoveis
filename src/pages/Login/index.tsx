@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./styles.module.scss";
 import { WelcomeIcon } from "../../icons";
@@ -29,9 +29,7 @@ export default function Login() {
             toast.success("Login realizado com sucesso!");
             navigate("/inicio");
         } catch (error: any) {
-            console.log("Erro no login:", error);
-    
-            // Exibe a mensagem de erro retornada pelo login
+          
             const errorMessage = error?.message || "Falha ao realizar login. Tente novamente.";
             toast.error(errorMessage);
         }
@@ -39,7 +37,9 @@ export default function Login() {
     
 
     return (
+        
         <div className={styles.login}>
+            <ToastContainer/>
             <div className={styles.loginContainer}>
                 <WelcomeIcon />
 
