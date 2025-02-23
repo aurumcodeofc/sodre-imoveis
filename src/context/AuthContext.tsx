@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -97,24 +98,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         "https://sodre-imoveis-production.up.railway.app/sessions",
         { email, password }
       );
-
+  
       const { token, roles, first_access } = response.data;
-
-      if (response.status === 200) {
-        localStorage.setItem("token", token);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        setLoginData({ token, roles, first_access });
-        setIsAuthenticated(true);
-        fetchUserSession(token);
+  
+      localStorage.setItem("token", token);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  
+      setLoginData({ token, roles, first_access });
+      setIsAuthenticated(true);
+      fetchUserSession(token);
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        throw new Error("Credenciais inválidas. Verifique seu e-mail e senha.");
       } else {
+        console.error("Erro no login:", error);
         throw new Error("Falha ao realizar login");
       }
-    } catch (error) {
-      console.error("Erro no login:", error);
-      throw new Error("Falha ao realizar login");
     }
   };
+  
 
   const logout = () => {
     localStorage.removeItem("token");

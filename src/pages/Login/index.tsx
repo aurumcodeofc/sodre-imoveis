@@ -18,25 +18,25 @@ export default function Login() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Valida se os campos estão preenchidos
+    
         if (!user.trim() || !password.trim()) {
             toast.error("Preencha todos os campos.");
             return;
         }
-
+    
         try {
             await login(user, password);
             toast.success("Login realizado com sucesso!");
             navigate("/inicio");
         } catch (error: any) {
-            if (error?.response?.status === 401) {
-                toast.error("Credenciais inválidas. Verifique seu e-mail e senha.");
-            } else {
-                toast.error("Ocorreu um erro no sistema. Tente novamente mais tarde.");
-            }
+            console.log("Erro no login:", error);
+    
+            // Exibe a mensagem de erro retornada pelo login
+            const errorMessage = error?.message || "Falha ao realizar login. Tente novamente.";
+            toast.error(errorMessage);
         }
     };
+    
 
     return (
         <div className={styles.login}>

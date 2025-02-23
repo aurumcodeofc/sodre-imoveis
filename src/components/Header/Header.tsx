@@ -14,6 +14,8 @@ const Header: React.FC = () => {
     { id: 3, message: "José Souza realizou o pagamento", isRead: true, type:"birthday" },
   ]);
 
+  
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 35) {
@@ -43,7 +45,8 @@ const Header: React.FC = () => {
           onUpdateNotifications={handleUpdateNotifications} 
         />
    
-        <Avatar name= {user.name} title={user?.name} navigateTo="/meu-perfil" variant="header"/>
+        <Avatar   name={user?.name ?? "Usuário"} 
+  title={user?.name ?? "Usuário"}  navigateTo="/meu-perfil" variant="header"/>
       </div>
     </div>
   );

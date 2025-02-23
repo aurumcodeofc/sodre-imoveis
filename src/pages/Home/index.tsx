@@ -6,9 +6,9 @@ import { useAuth } from "../../context/AuthContext"
 
 export default function Home(){
     const { user, isLoading } = useAuth();
-    console.log("laza",user)
+    
     if (isLoading) {
-      return <div>Carregando...</div>; // Ou um loader de sua escolha
+      return <div>Carregando...</div>; 
     }
   
 
