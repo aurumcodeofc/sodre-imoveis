@@ -2,20 +2,20 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-// Interface para a role do usuário
+
 interface Role {
   id: string;
   role: string;
 }
 
-// Interface para os dados de login retornados pela API
+
 interface LoginData {
   token: string;
   roles: Role[];
   first_access: boolean;
 }
 
-// Interface para os dados do usuário
+
 interface User {
   id: string;
   name: string;
@@ -38,7 +38,7 @@ interface User {
   };
 }
 
-// Interface do contexto de autenticação
+
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
@@ -48,10 +48,10 @@ interface AuthContextType {
   firstAccess: boolean;
 }
 
-// Criação do contexto
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Provider do contexto de autenticação
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const navigate = useNavigate();
 
-  // Função para buscar o perfil do usuário logado
+
   const fetchUserSession = async (token: string) => {
     try {
       const response = await axios.get<User>(
@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Verificar token no localStorage ao carregar a aplicação
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  // Função de login
+
   const login = async (email: string, password: string): Promise<void> => {
     try {
       const response = await axios.post<LoginData>(
@@ -116,7 +116,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setFirstAccess(first_access);
       await fetchUserSession(token);
 
-      // Redireciona com base no first_access
+
       if (first_access) {
         navigate("/primeiro-acesso");
       } else {
@@ -128,7 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Função de logout
+
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("first_access");
@@ -139,7 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     navigate("/login");
   };
 
-  // Carregando enquanto verifica a sessão
+
   if (isLoading) {
     return <div>Carregando...</div>;
   }
@@ -153,7 +153,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-// Hook para consumir o contexto de autenticação
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

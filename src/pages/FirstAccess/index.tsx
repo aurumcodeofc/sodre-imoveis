@@ -15,7 +15,7 @@ export default function FirstAccess(){
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const { isAuthenticated, logout } = useAuth();
+    const {logout } = useAuth();
     const navigate = useNavigate()
     const handleCancel = () => {
         logout(); 

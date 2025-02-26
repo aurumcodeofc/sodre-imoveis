@@ -9,12 +9,12 @@ import Input from "../../ui/Input/Input";
 import Button from "../../ui/Button/Button";
 
 export default function Login() {
-  const { login, firstAccess, isAuthenticated } = useAuth(); 
+  const { login} = useAuth(); 
   const navigate = useNavigate();
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);  // Estado de carregamento
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,17 +24,16 @@ export default function Login() {
       return;
     }
   
-    setIsLoading(true);  // Inicia o estado de carregamento
+    setIsLoading(true);  
   
     try {
-      const loginData = await login(user, password);  // Tenta o login
+      const loginData = await login(user, password);
       
       if (loginData) {
-        const { first_access } = loginData;  // Pega o first_access da resposta
+        const { first_access } = loginData;  
   
         toast.success("Login realizado com sucesso!");
   
-        // Redireciona com base no first_access
         if (first_access) {
           navigate("/primeiro-acesso");
         } else {
@@ -47,7 +46,7 @@ export default function Login() {
       console.error("Erro no login:", error?.message || "Falha ao realizar login.");
       toast.error(error?.message || "Falha ao realizar login.");
     } finally {
-      setIsLoading(false);  // Finaliza o estado de carregamento
+      setIsLoading(false); 
     }
   };
   
@@ -102,7 +101,7 @@ export default function Login() {
               flexDirection: "row-reverse",
             }}
             variant="terciary"
-            disabled={isLoading}  // Desabilita o botão enquanto o login está em andamento
+            disabled={isLoading}  
           >
             {isLoading ? "Carregando..." : "Acessar"}
           </Button>
