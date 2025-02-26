@@ -16,11 +16,11 @@ export function Router(){
         <AuthProvider>
           <Routes>
           <Route index element={<Login />} />
-          <Route path = "primeiro-acesso" element={<FirstAccess/>}/>
+          
           <Route path = "esqueceu-senha" element={<ForgotPassword/>}/>
           <Route element={<ProtectedRoute />}>
                 <Route path = "/" element = {<MainLayout/>}>
-              
+                <Route path = "primeiro-acesso" element={<FirstAccess/>}/>
                 <Route path="inicio" element={<Home />} />
                 <Route path="acesso" element={<AccessControl/>}/>
                 <Route path="importar-funcionario" element={<ImportEmployee/>}/>

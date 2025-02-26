@@ -5,17 +5,19 @@ import Footer from "../components/Footer/Footer";
 
 const MainLayout: React.FC = () => {
     const location = useLocation();
-    const isLoginPage = location.pathname === "/"; 
+    const isLoginPage = location.pathname === "/";
+    const isFirstAccess = location.pathname === "/primeiro-acesso";  // Corrigido para incluir a barra inicial
 
     return (
         <>
-            {!isLoginPage && <Header />}
-            {!isLoginPage && <Sidebar />}
-            
-            <main style={{ marginTop: isLoginPage ? "0px" : "75px", marginLeft: isLoginPage ? "0px" : "95px" }}>
+            {/* Verifica se não é a página de login nem o primeiro acesso */}
+            {!isLoginPage && !isFirstAccess && <Header />}
+            {!isLoginPage && !isFirstAccess && <Sidebar />}
+
+            <main style={{ marginTop: isLoginPage || isFirstAccess ? "0px" : "75px", marginLeft: isLoginPage || isFirstAccess ? "0px" : "95px" }}>
                 <Outlet />
             </main>
-            {/* <Footer/> */}
+            {/* <Footer /> */}
         </>
     );
 };

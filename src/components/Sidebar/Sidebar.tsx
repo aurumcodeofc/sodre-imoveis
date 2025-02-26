@@ -28,7 +28,7 @@ const Sidebar: React.FC = () => {
 
   const handleLogout = () => {
     logout(); // Chama o logout para limpar o estado
-    navigate('/login'); // Redireciona o usuário para a página de login
+    navigate('/'); // Redireciona o usuário para a página de login
   };
 
   return (

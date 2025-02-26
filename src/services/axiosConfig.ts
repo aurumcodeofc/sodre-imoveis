@@ -19,7 +19,7 @@ api.interceptors.response.use(
         console.error("Erro ao renovar token", err);
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     }
     return Promise.reject(error);
