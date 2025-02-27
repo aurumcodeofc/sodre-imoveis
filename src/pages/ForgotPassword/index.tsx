@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useState } from "react";
 import styles from "./styles.module.scss";
 import Input from "../../ui/Input/Input";

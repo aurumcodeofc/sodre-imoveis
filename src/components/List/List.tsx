@@ -4,7 +4,6 @@ import styles from "./styles.module.scss";
 import Pagination from "../Pagination/Pagination"; 
 type Record = {
   id: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any; 
 };
 

@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { AddBt, DownArrow } from "../../icons";
 import Button from "../../ui/Button/Button";
-import TitlePage from "../../components/TitlePage/TitlePage"
+import TitlePage from "../../components/TitlePage/TitlePage";
 import FormAccess from "../../components/FormAccess/FormAccess";
 import styles from "./styles.module.scss";
 import List from "../../components/List/List";
 import { ToastContainer } from "react-toastify";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom";
 import ExportEmployee from "../../components/ExportEmployee/ExportEmployee";
 
 type User = {
   id: number;
-  name: string;
+  fullName: string;
   email: string;
   status: string;
   role: string;
@@ -23,7 +23,7 @@ export default function AccessControl() {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isOpenExport, setIsOpenExport] = useState<boolean>(false);
-  const [userData, setUserData] = useState<User[]>([]); 
+  const [userData, setUserData] = useState<User[]>([]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -36,24 +36,22 @@ export default function AccessControl() {
   const toggleExport = () => {
     setIsOpenExport(!isOpenExport);
     setIsMenuOpen(false);
-  }
+  };
 
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
 
-  const handleCloseExport = () =>{
-  
+  const handleCloseExport = () => {
     setIsOpenExport(false);
-  }
-
+  };
 
   const handleFormSubmit = (newUser: Omit<User, "id">) => {
     const newUserWithId = {
       id: userData.length + 1,
       ...newUser,
     };
-    setUserData((prev) => [...prev, newUserWithId]); 
+    setUserData((prev) => [...prev, newUserWithId]);
     handleCloseModal();
   };
 
@@ -61,7 +59,7 @@ export default function AccessControl() {
     <>
       <div className={styles.container}>
         <div className={styles.containerTitle}>
-          <TitlePage text="Controle de Acesso"/>
+          <TitlePage text="Controle de Acesso" />
           <div className={styles.btContainer}>
             <Button
               onClick={toggleMenu}
@@ -105,7 +103,7 @@ export default function AccessControl() {
             data={userData}
             columns={[
               "id",
-              "name",
+              "fullName",
               "email",
               "status",
               "role",
@@ -114,7 +112,7 @@ export default function AccessControl() {
             ]}
             onView={(id) => alert(`Visualizar ${id}`)}
             onEdit={(id, updatedData) =>
-              alert(`Editar ${id}`, JSON.stringify(updatedData))
+              alert(`Editar ${id}: ${JSON.stringify(updatedData)}`)
             }
             onDelete={(id) =>
               setUserData((prev) => prev.filter((user) => user.id !== id))
@@ -125,23 +123,20 @@ export default function AccessControl() {
           className={`${styles.dropdownMenu} ${isMenuOpen ? styles.open : ""}`}
         >
           <ul>
-          <Link to="/importar-funcionario"><li>Importar</li></Link>
+            <Link to="/importar-funcionario">
+              <li>Importar</li>
+            </Link>
             <li onClick={toggleExport}>Exportar</li>
             <li>Aplicar Permissões</li>
           </ul>
         </div>
         {isOpenModal && (
-          <div>
-            <FormAccess onSubmit={handleFormSubmit} onClose={handleCloseModal} />
-          </div>
+          <FormAccess onSubmit={handleFormSubmit} onClose={handleCloseModal} />
         )}
-
-      {isOpenExport && (
-          <div>
-            <ToastContainer style={{zIndex:"99999"}}/>
-            <ExportEmployee onClose={handleCloseExport} data={userData}/>
-          </div>
+        {isOpenExport && (
+          <ExportEmployee onClose={handleCloseExport} data={userData} />
         )}
+        <ToastContainer style={{ zIndex: "99999" }} />
       </div>
     </>
   );

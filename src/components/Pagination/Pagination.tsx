@@ -3,10 +3,10 @@ import styles from './styles.module.scss';
 
 interface PaginationProps {
   totalRecords: number;
-  recordsPerPageOptions: (number | string)[]; // Aceita tanto números quanto "all"
+  recordsPerPageOptions: (number | string)[]; 
   onPageChange: (page: number) => void;
   onRecordsPerPageChange: (recordsPerPage: number | string) => void;
-  currentPage: number; // Recebe o currentPage de UserList
+  currentPage: number; 
 }
 
 const Pagination: React.FC<PaginationProps> = ({
@@ -49,7 +49,7 @@ const Pagination: React.FC<PaginationProps> = ({
           ))}
         </select>
 
-        {/* Não exibe os botões de paginação quando "all" é selecionado */}
+       
         {recordsPerPage !== 'all' && (
           <>
             <button

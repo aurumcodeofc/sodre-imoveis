@@ -24,29 +24,23 @@ export default function Login() {
       return;
     }
   
-    setIsLoading(true);  
+    setIsLoading(true);
   
     try {
-      const loginData = await login(user, password);
-      
-      if (loginData) {
-        const { first_access } = loginData;  
+      const loginData = await login(user, password); 
   
-        toast.success("Login realizado com sucesso!");
+      toast.success("Login realizado com sucesso!");
   
-        if (first_access) {
-          navigate("/primeiro-acesso");
-        } else {
-          navigate("/inicio");
-        }
+      if (loginData.first_access) {
+        navigate("/primeiro-acesso");
       } else {
-        throw new Error("Dados de login inválidos");
+        navigate("/inicio");
       }
     } catch (error: any) {
       console.error("Erro no login:", error?.message || "Falha ao realizar login.");
       toast.error(error?.message || "Falha ao realizar login.");
     } finally {
-      setIsLoading(false); 
+      setIsLoading(false);
     }
   };
   

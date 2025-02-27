@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as XLSX from "xlsx";
   export const formatCPF = (value: string) => {
     const onlyNumbers = value.replace(/\D/g, '').slice(0, 11); 

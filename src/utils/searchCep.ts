@@ -1,5 +1,4 @@
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const searchCep = async (cep: string): Promise<any> => {
     const formattedCEP = cep.replace(/\D/g, ''); 
     const url = `https://viacep.com.br/ws/${formattedCEP}/json/`;

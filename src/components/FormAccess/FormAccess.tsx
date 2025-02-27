@@ -24,8 +24,8 @@ interface EmployeeProps {
 }
 
 interface FormField {
-  fields: EmployeeProps[];
-  role: "administrador" | "gerente" | "estagiario" | "corretor";
+  fields?: EmployeeProps[];
+  role?: "administrador" | "gerente" | "estagiario" | "corretor";
   onSubmit:  (data: {   fullName: string;
     cpf: string; 
     email: string;
@@ -72,11 +72,11 @@ const FormAccess: React.FC<FormField> = ({ onSubmit,onClose }) => {
   
     setFormData((prevData) => ({
       ...prevData,
-      cep: formattedCEP,
+      cep: formattedCEP || "",
     }));
   
    
-    if (formattedCEP.length === 8 && /^\d{8}$/.test(formattedCEP)) {
+    if (formattedCEP && formattedCEP.length === 8 && /^\d{8}$/.test(formattedCEP)) {
       try {
         const addressData = await searchCep(formattedCEP);
   

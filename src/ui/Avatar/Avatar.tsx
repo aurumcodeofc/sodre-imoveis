@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { useNavigate } from "react-router-dom"; // Importa o useNavigate
+import { useNavigate } from "react-router-dom"; 
 import styles from "./styles.module.scss";
 
 interface AvatarProps {
@@ -11,7 +11,7 @@ interface AvatarProps {
 }
 
 const Avatar: FC<AvatarProps> = ({ name, image, title, navigateTo,variant }) => {
-  const navigate = useNavigate(); // Obtém a função de navegação
+  const navigate = useNavigate(); 
 
   const getVariantClass = () => {
     switch (variant) {
@@ -32,13 +32,13 @@ const Avatar: FC<AvatarProps> = ({ name, image, title, navigateTo,variant }) => 
 
   const handleAvatarClick = () => {
     if (navigateTo) {
-      navigate(navigateTo); // Navega para a URL especificada em navigateTo
+      navigate(navigateTo); 
     }
   };
 
   return (
     <div
-    className={`${styles.avatar} ${getVariantClass()}`} title={title}
+    className={`${styles.avatar} ${getVariantClass()}`} title={title ?? undefined} 
       onClick={handleAvatarClick}
     >
       {image ? (

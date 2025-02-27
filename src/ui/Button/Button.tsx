@@ -7,7 +7,7 @@ interface ButtonProps {
   customStyles?: React.CSSProperties;
   type?: "button" | "submit" | "reset";
   children: React.ReactNode; 
-  disabled?: boolean;  // Adiciona a prop disabled
+  disabled?: boolean; 
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,7 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   customStyles,
   type,
-  disabled = false, // Define o valor padrão para disabled como false
+  disabled = false,
 }) => {
   const getVariantClass = () => {
     switch (variant) {
@@ -39,7 +39,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       style={customStyles}
       className={`${styles.btn} ${getVariantClass()}`}
-      disabled={disabled}  // Passa a prop disabled para o botão
+      disabled={disabled}  
     >
       {children}
     </button>

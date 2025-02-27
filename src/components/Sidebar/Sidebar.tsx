@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './styles.module.scss';
-import { Link, useNavigate } from 'react-router-dom'; // Importando useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import { HomeIcon, PanelIcon, ClientIcon, FaturaIcon, VistoriaIcon, ContractIcon, MaintenanceIcon, AccessIcon, LogoFull, LogoMin, ExitIcon } from '../../icons';
 import { useAuth } from '../../context/AuthContext';
 
@@ -13,7 +13,7 @@ type SidebarItem = {
 const Sidebar: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const [isExpanded, setIsExpanded] = useState(false);
-  const navigate = useNavigate(); // Inicializando useNavigate para redirecionamento
+  const navigate = useNavigate(); 
 
   const items: SidebarItem[] = [
     { label: 'Início', icon: <HomeIcon />, link: "/inicio"},
@@ -27,8 +27,8 @@ const Sidebar: React.FC = () => {
   ];
 
   const handleLogout = () => {
-    logout(); // Chama o logout para limpar o estado
-    navigate('/'); // Redireciona o usuário para a página de login
+    logout(); 
+    navigate('/'); 
   };
 
   return (
@@ -52,7 +52,7 @@ const Sidebar: React.FC = () => {
           </li>
         ))}
         
-        {/* Botão de Logout */}
+  
         {isAuthenticated && (
           <li className={`${styles.item} ${styles.exit}`} onClick={handleLogout}>
             <span className={styles.icon} style={{ display: "flex", cursor: "pointer" }}>

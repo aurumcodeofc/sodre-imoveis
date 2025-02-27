@@ -41,7 +41,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<LoginData>; 
   logout: () => void;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -100,33 +100,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
 
-  const login = async (email: string, password: string): Promise<void> => {
+  const login = async (email: string, password: string): Promise<LoginData> => {
     try {
       const response = await axios.post<LoginData>(
         "https://sodre-imoveis-production.up.railway.app/sessions",
         { email, password }
       );
-
+  
       const { token, first_access } = response.data;
-
+  
       localStorage.setItem("token", token);
       localStorage.setItem("first_access", String(first_access));
-
+  
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setFirstAccess(first_access);
       await fetchUserSession(token);
-
-
-      if (first_access) {
-        navigate("/primeiro-acesso");
-      } else {
-        navigate("/inicio");
-      }
+  
+      return response.data; 
     } catch (error: any) {
       console.error("Erro ao fazer login:", error);
       throw new Error(error?.response?.data?.message || "Falha ao realizar login");
     }
   };
+  
 
 
   const logout = () => {

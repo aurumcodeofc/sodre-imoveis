@@ -26,9 +26,29 @@ interface EmployeeData {
   lastAccess: string;
 }
 
+interface User {
+  id: number;
+  fullName?: string;
+  cpf?: string;
+  email?: string;
+  creci?: string;
+  telefone?: string;
+  birthData?: string;
+  cep?: string;
+  city?: string;
+  state?: string;
+  status?: string;
+  role?: string;
+  neighborhood?: string;
+  street?: string;
+  homeNumber?: string;
+  registrationDate?: string;
+  lastAccess?: string;
+}
+
 interface ExportEmployeeProps {
   onClose: () => void;
-  data: EmployeeData[];
+  data: User[];
 }
 
 const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onClose, data }) => {
@@ -59,14 +79,31 @@ const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onClose, data }) => {
   };
 
   const getFilteredData = (): EmployeeData[] => {
-    return data.filter((item) => {
-      const matchesStatus =
-        selectedStatus === "all" || item.status === selectedStatus;
-
-      const matchesPeriod = filterByPeriod(item.registrationDate);
-
-      return matchesStatus && matchesPeriod;
-    });
+    return data
+      .map((user) => ({
+        id: user.id,
+        fullName: user.fullName ?? "",
+        cpf: user.cpf ?? "",
+        email: user.email ?? "",
+        creci: user.creci ?? "",
+        telefone: user.telefone ?? "",
+        birthData: user.birthData ?? "",
+        cep: user.cep ?? "",
+        city: user.city ?? "",
+        state: user.state ?? "",
+        status: user.status ?? "",
+        role: user.role ?? "",
+        neighborhood: user.neighborhood ?? "",
+        street: user.street ?? "",
+        homeNumber: user.homeNumber ?? "",
+        registrationDate: user.registrationDate ?? "",
+        lastAccess: user.lastAccess ?? "",
+      }))
+      .filter((item) => {
+        const matchesStatus = selectedStatus === "all" || item.status === selectedStatus;
+        const matchesPeriod = filterByPeriod(item.registrationDate);
+        return matchesStatus && matchesPeriod;
+      });
   };
 
   const handleExport = () => {
@@ -108,7 +145,7 @@ const ExportEmployee: React.FC<ExportEmployeeProps> = ({ onClose, data }) => {
 
   return (
     <div className={styles.container} onClick={handleOverlayClick}>
-        <ToastContainer />
+      <ToastContainer />
       <div className={styles.formContainer}>
         <div className={styles.header}>
           <h1>Exportar Funcionários</h1>
