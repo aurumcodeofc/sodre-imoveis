@@ -7,7 +7,7 @@ import Tab from "../../ui/Tab/Tab";
 import "react-phone-input-2/lib/style.css";
 import styles from "./styles.module.scss";
 import ProfileField from "../../ui/ProfileFIeld/ProfileField";
-import { formatDate, formatHour, formatCEP, formatCPF } from "../../utils/helpers";
+import { formatDate, formatHour, formatCPF } from "../../utils/helpers";
 import { searchCep } from "../../utils/searchCep";
 import api from "../../services/api"; 
 import Button from "../../ui/Button/Button";
@@ -16,11 +16,12 @@ import { ToastContainer } from "react-toastify";
 
 export default function Profile() {
   const { user } = useAuth(); 
+  
   const [isOpenChangePass, setIsOpenChangePass] = useState<boolean>(false);
-  const dateHour = `${formatDate(user.created_at)} ${formatHour(user.created_at)}`;
-  const birthDate = formatDate(user.birth_date);
+  const dateHour = `${formatDate(user?.created_at || "")} ${formatHour(user?.created_at || "")}`;
+  const birthDate = formatDate(user?.birth_date || "");
 
-  const [name, setName] = useState(user?.name);
+  const [name, setName] = useState(user?.name );
   const [phone, setPhone] = useState(user?.phone); 
   const [birthDateState, setBirthDateState] = useState(birthDate);
   const [cpf, setCpf] = useState(user?.cpf);
@@ -124,7 +125,7 @@ export default function Profile() {
 
   const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setBirthDateState(formatBirthDateInput(value));
+    setBirthDateState(formatDate(value));
   };
 
   const userContent = (
@@ -271,7 +272,7 @@ export default function Profile() {
       <TitlePage text="Meu Perfil" />
       <div className={styles.headerProfile}>
         <div className={styles.profileIcon}>
-          <Avatar name={user.name} title={user?.name} variant="profile" />
+          <Avatar name={user?.name || ""} title={user?.name || ""} variant="profile" />
         </div>
         <div className={styles.profileInfo}>
           <div className={styles.profileStatus}>

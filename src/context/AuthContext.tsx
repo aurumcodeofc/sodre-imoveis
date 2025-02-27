@@ -21,6 +21,7 @@ interface User {
   name: string;
   email: string;
   cpf: string;
+  cnpj:string;
   phone: string;
   mobile_phone: string;
   person_type: string;

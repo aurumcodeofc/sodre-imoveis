@@ -7,6 +7,7 @@ interface ProfileFieldProps {
   value: string | undefined;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickPassword?: () => void; 
+  disabled?: boolean;
 }
 
 const ProfileField: React.FC<ProfileFieldProps> = ({
